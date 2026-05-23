@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parquímetro Digital POO</title>
+  
+  <!-- Fontes Premium -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- Estilos Local -->
+  <link rel="stylesheet" href="src/css/styles.css">
+</head>
+
+<body>
+  <div class="terminal-cabinet">
+    <!-- Luzes do Terminal (Micro-interações) -->
+    <div class="terminal-lights">
+      <span class="light red" id="lightRed"></span>
+      <span class="light yellow" id="lightYellow"></span>
+      <span class="light green active" id="lightGreen"></span>
+    </div>
+
+    <header class="terminal-header">
+      <div class="header-brand">
+        <svg class="icon-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 6v6l4 2"></path>
+        </svg>
+        <h1>PARK-TRONIC <span>v1.0</span></h1>
+      </div>
+      <div class="terminal-status">
+        <span class="status-dot online"></span>
+        <span class="status-text">ONLINE</span>
+      </div>
+    </header>
+
+    <!-- Tela Digital do Parquímetro -->
+    <section class="terminal-screen-container">
+      <div class="screen-glare"></div>
+      <div class="terminal-screen">
+        <div class="screen-scanline"></div>
+        <div class="screen-grid"></div>
+        
+        <div class="screen-header">
+          <span>TARIFA ATUAL: <strong id="screenRate">R$ 0,00/h</strong></span>
+          <span class="screen-time" id="screenClock">12:00:00</span>
+        </div>
+
+        <div class="screen-display">
+          <div class="display-main">
+            <span class="display-label">TEMPO COMPRADO</span>
+            <span class="display-value"><span id="tempo">00</span> <span class="unit">MIN</span></span>
+          </div>
+          <div class="display-sub">
+            <div class="sub-item">
+              <span class="sub-label">VALOR PAGO</span>
+              <span class="sub-value" id="displayValor">R$ 0,00</span>
+            </div>
+            <div class="sub-item">
+              <span class="sub-label">TROCO</span>
+              <span class="sub-value" id="troco">R$ 0,00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="screen-footer">
+          <p id="msg" class="screen-msg">Selecione o veículo e insira moedas</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slot de Saída do Ticket Físico (Animado) -->
+    <div class="ticket-slot-container">
+      <div class="ticket-slot-line"></div>
+      <div class="ticket-wrapper" id="ticketWrapper">
+        <div class="ticket" id="physicalTicket">
+          <div class="ticket-cut"></div>
+          <div class="ticket-header">
+            <h3>RECIBO DE ESTACIONAMENTO</h3>
+            <span class="ticket-id" id="ticketId">#000000</span>
+          </div>
+          <div class="ticket-body">
+            <div class="ticket-row">
+              <span>VEÍCULO:</span>
+              <strong id="ticketVeiculo">-</strong>
+            </div>
+            <div class="ticket-row">
+              <span>TARIFA HORA:</span>
+              <strong id="ticketTarifa">-</strong>
+            </div>
+            <div class="ticket-row">
+              <span>VALOR PAGO:</span>
+              <strong id="ticketValor">-</strong>
+            </div>
+            <div class="ticket-row highlight">
+              <span>TEMPO LIMITE:</span>
+              <strong id="ticketTempo">-</strong>
+            </div>
+            <div class="ticket-row">
+              <span>EMISSÃO:</span>
+              <span id="ticketEmissao">-</span>
+            </div>
+          </div>
+          <div class="ticket-barcode">
+            <div class="barcode-line"></div>
+            <span>OBRIGADO / VOLTE SEMPRE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Painel de Controles Físicos -->
+    <main class="terminal-controls">
+      <form id="parquimetroForm" onsubmit="event.preventDefault();">
+        
+        <!-- Passo 1: Selecionar Veículo (Cartões Interativos) -->
+        <div class="control-group">
+          <label class="control-label">1. TIPO DE VEÍCULO</label>
+          <div class="vehicle-cards">
+            <!-- Moto Card -->
+            <label class="vehicle-card" for="vehicle-moto">
+              <input type="radio" name="tipoVeiculoRadio" id="vehicle-moto" value="moto" checked>
+              <div class="card-content">
+                <svg class="vehicle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="5" cy="18" r="3"></circle>
+                  <circle cx="19" cy="18" r="3"></circle>
+                  <path d="M12 18V8h7M12 8l-2-3H5v3h7M19 18l-3-6h-4"></path>
+                </svg>
+                <span class="vehicle-name">Moto</span>
+                <span class="vehicle-price">R$ 2,00/h</span>
+              </div>
+            </label>
+
+            <!-- Carro Card -->
+            <label class="vehicle-card" for="vehicle-carro">
+              <input type="radio" name="tipoVeiculoRadio" id="vehicle-carro" value="carro">
+              <div class="card-content">
+                <svg class="vehicle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="1" y="3" width="22" height="13" rx="2" ry="2"></rect>
+                  <path d="M14 9H9v3h5V9zM5 16v4m14-4v4"></path>
+                  <circle cx="6" cy="16" r="2"></circle>
+                  <circle cx="18" cy="16" r="2"></circle>
+                </svg>
+                <span class="vehicle-name">Carro</span>
+                <span class="vehicle-price">R$ 5,00/h</span>
+              </div>
+            </label>
+
+            <!-- Ônibus Card -->
+            <label class="vehicle-card" for="vehicle-onibus">
+              <input type="radio" name="tipoVeiculoRadio" id="vehicle-onibus" value="onibus">
+              <div class="card-content">
+                <svg class="vehicle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="4" y="2" width="16" height="16" rx="2"></rect>
+                  <path d="M6 18H5m14 0h-1M6 14h12M6 6h12M8 10h8M9 18v2m6-2v2"></path>
+                </svg>
+                <span class="vehicle-name">Ônibus</span>
+                <span class="vehicle-price">R$ 10,00/h</span>
+              </div>
+            </label>
+          </div>
+
+          <!-- Select oculto / auxiliar para manter compatibilidade com hooks antigos -->
+          <select id="tipoVeiculo" class="hidden-select">
+            <option value="moto" selected>Moto</option>
+            <option value="carro">Carro</option>
+            <option value="onibus">Ônibus</option>
+          </select>
+        </div>
+
+        <!-- Passo 2: Inserir Moedas / Cédulas -->
+        <div class="control-group">
+          <label class="control-label" for="valorInput">2. DEPOSITAR VALOR (R$)</label>
+          
+          <!-- Botões rápidos de inserção física de moedas -->
+          <div class="coin-inserter">
+            <button type="button" class="btn-coin" data-val="0.50">R$ 0,50</button>
+            <button type="button" class="btn-coin" data-val="1.00">R$ 1,00</button>
+            <button type="button" class="btn-coin" data-val="2.00">R$ 2,00</button>
+            <button type="button" class="btn-coin" data-val="5.00">R$ 5,00</button>
+            <button type="button" class="btn-coin" data-val="10.00">R$ 10,00</button>
+          </div>
+
+          <div class="input-wrapper">
+            <span class="input-prefix">R$</span>
+            <input type="number" id="valorInput" step="0.01" min="0" placeholder="0,00" required autocomplete="off">
+          </div>
+        </div>
+
+        <!-- Botões de Ação Física do Painel -->
+        <div class="actions">
+          <button type="button" id="btnLimpar" class="btn-control btn-danger">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            Limpar
+          </button>
+          <button type="button" id="btnPagar" class="btn-control btn-success">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"></path>
+            </svg>
+            Pagar / Emitir
+          </button>
+        </div>
+
+        <!-- Div oculta/visível de resultado para preservar compatibilidade com o JS original -->
+        <div id="resultado" class="hidden"></div>
+      </form>
+
+      <!-- Histórico de Transações Recentes -->
+      <section class="history-panel">
+        <details>
+          <summary>
+            <div class="summary-content">
+              <svg class="summary-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span>Histórico de transações</span>
+            </div>
+            <svg class="summary-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </summary>
+          <div class="history-content">
+            <ul id="historico" class="historico-list">
+              <!-- Transações injetadas pelo JS -->
+            </ul>
+          </div>
+        </details>
+      </section>
+    </main>
+
+    <footer class="terminal-footer-info">
+      <p>&copy; 2026 - Parquímetro Digital POO &bull; Terminais de Autoatendimento</p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script type="text/javascript" src="src/js/utils.js"></script>
+  <script type="text/javascript" src="src/js/classes.js"></script>
+  <script type="text/javascript" src="src/js/app.js"></script>
+</body>
+
+</html>
